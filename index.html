@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM GAETO - Vendedores</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="card">
+            <h2>Acceso GAETO</h2>
+            <input type="text" id="login-nombre" placeholder="Nombre de Usuario">
+            <input type="password" id="login-clave" placeholder="Contraseña Administrativa">
+            <button onclick="ingresarAlSistema()" class="btn-azul">ENTRAR AL SISTEMA</button>
+        </div>
+    </div>
+
+    <div id="app-container" style="display:none;">
+        <h1>SISTEMA DE CONTROL GAETO</h1>
+        
+        <div class="card">
+            <h3>Dar de Alta Nuevo Vendedor</h3>
+            <input type="text" id="new-nombre" placeholder="Nombre del Vendedor">
+            <input type="text" id="new-clave" placeholder="Clave que usará el vendedor">
+            <button id="btn-registrar" class="btn-verde">ENVIAR A LA NUBE</button>
+        </div>
+
+        <div class="card">
+            <h3>Vendedores Registrados en la Nube</h3>
+            <div id="lista-vendedores">Cargando lista...</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
