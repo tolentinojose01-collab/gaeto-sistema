@@ -1,68 +1,16 @@
-body {
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f0f2f5;
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #f4f7f6; }
+#app-container { display: flex; min-height: 100vh; flex-direction: row; }
+@media (max-width: 600px) { #app-container { flex-direction: column; } }
 
-h1 {
-    color: #1a73e8;
-    margin-bottom: 30px;
-}
+.sidebar { width: 220px; background: #2c3e50; color: white; padding: 20px; }
+.sidebar button { width: 100%; background: none; border: 1px solid #444; color: white; padding: 12px; margin: 5px 0; cursor: pointer; text-align: left; }
 
-.card {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 400px;
-    margin-bottom: 20px;
-}
+.content { flex-grow: 1; padding: 20px; text-align: center; }
+.card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: inline-block; width: 100%; max-width: 400px; }
 
-input {
-    width: 90%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    outline: none;
-}
+input, select { display: block; width: 90%; margin: 10px auto; padding: 10px; border-radius: 5px; border: 1px solid #ddd; }
+.btn-azul { background: #1a73e8; color: white; border: none; padding: 12px; width: 90%; cursor: pointer; border-radius: 5px; font-weight: bold; }
+.btn-verde { background: #28a745; color: white; border: none; padding: 12px; width: 90%; cursor: pointer; border-radius: 5px; font-weight: bold; }
 
-input:focus {
-    border-color: #1a73e8;
-    box-shadow: 0 0 5px rgba(26,115,232,0.3);
-}
-
-button {
-    width: 100%;
-    padding: 14px;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.1s;
-}
-
-.btn-azul { background-color: #1a73e8; color: white; }
-.btn-azul:hover { background-color: #1557b0; }
-
-.btn-verde { background-color: #28a745; color: white; margin-top: 10px; }
-.btn-verde:hover { background-color: #218838; }
-
-button:active { transform: scale(0.98); }
-
-#lista-vendedores div {
-    background: #f8f9fa;
-    padding: 12px;
-    margin: 8px 0;
-    border-left: 5px solid #28a745;
-    border-radius: 4px;
-    text-align: left;
-    font-size: 15px;
-}
+.stats-grid { display: flex; gap: 15px; margin: 20px auto; max-width: 600px; }
+.stat-card { background: white; flex: 1; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }

@@ -3,34 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM GAETO</title>
+    <title>GAETO SISTEMA</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div id="login-screen">
-        <div style="background:white; padding:20px; border-radius:10px; display:inline-block; margin-top:50px; border:1px solid #ccc; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-            <h2>Acceso GAETO</h2>
-            <input type="text" id="login-nombre" placeholder="Usuario (Jose Tolentino)" style="display:block; margin:10px auto; padding:10px; width:200px;">
-            <input type="password" id="login-clave" placeholder="Clave (GT123)" style="display:block; margin:10px auto; padding:10px; width:200px;">
-            <button onclick="ingresarAlSistema()" style="background:#007bff; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer; width:100%;">ENTRAR</button>
+        <div class="card">
+            <h1 style="color:#1a73e8; margin:0;">GAETO</h1>
+            <p>Control de Ventas y Plazas</p>
+            <input type="text" id="login-nombre" placeholder="Jose Tolentino">
+            <input type="password" id="login-clave" placeholder="GT123">
+            <button onclick="ingresarAlSistema()" class="btn-azul">ENTRAR AL SISTEMA</button>
         </div>
     </div>
 
-    <div id="app-container" style="display:none; padding:20px;">
-        <h1>SISTEMA DE CONTROL - GAETO</h1>
-        <div style="background:white; padding:20px; border-radius:10px; border:1px solid #ccc; margin:auto; max-width:400px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-            <h3>Dar de Alta Nuevo Vendedor</h3>
-            <input type="text" id="new-nombre" placeholder="Nombre completo" style="width:90%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:5px;">
-            <input type="text" id="new-clave" placeholder="Asignar clave" style="width:90%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:5px;">
-            <button id="btn-registrar" style="background:#28a745; color:white; padding:12px; width:100%; font-weight:bold; cursor:pointer; border:none; border-radius:5px; font-size:16px;">ENVIAR A LA NUBE</button>
-        </div>
-        
-        <div style="background:white; padding:20px; border-radius:10px; border:1px solid #ccc; margin-top:20px; max-width:400px; margin-left:auto; margin-right:auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-            <h3>Vendedores en la Nube</h3>
-            <div id="lista-vendedores" style="text-align:left;">Cargando datos...</div>
-        </div>
+    <div id="app-container" style="display:none;">
+        <nav class="sidebar">
+            <h2>GAETO</h2>
+            <button onclick="mostrarSeccion('dashboard')">📊 INDICADORES</button>
+            <button onclick="mostrarSeccion('registro')">💰 NUEVA VENTA</button>
+            <button onclick="mostrarSeccion('vendedores')">👥 VENDEDORES</button>
+        </nav>
+
+        <main class="content">
+            <section id="sec-dashboard">
+                <h1>Dashboard de Ventas</h1>
+                <div class="stats-grid">
+                    <div class="stat-card"><h4>TOTAL ACUMULADO</h4><p id="total-general">$0.00</p></div>
+                    <div class="stat-card"><h4>PLAZA LÍDER</h4><p id="mejor-plaza">Veracruz</p></div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="graficaVentas"></canvas>
+                </div>
+            </section>
+
+            <section id="sec-registro" style="display:none;">
+                <h1>Registro de Operación</h1>
+                <div class="card">
+                    <input type="number" id="v-monto" placeholder="Monto ($)">
+                    <select id="v-plaza">
+                        <option value="Veracruz">Veracruz</option>
+                        <option value="Medellín">Medellín</option>
+                        <option value="Xalapa">Xalapa</option>
+                        <option value="Boca del Río">Boca del Río</option>
+                    </select>
+                    <input type="text" id="v-concepto" placeholder="Concepto (Concreto / Persianas)">
+                    <button onclick="guardarVenta()" class="btn-verde">SUBIR A LA NUBE</button>
+                </div>
+            </section>
+
+            <section id="sec-vendedores" style="display:none;">
+                <h1>Gestión de Equipo</h1>
+                <div class="card">
+                    <input type="text" id="new-nombre" placeholder="Nombre del Vendedor">
+                    <input type="text" id="new-clave" placeholder="Clave">
+                    <button id="btn-registrar" class="btn-azul">REGISTRAR VENDEDOR</button>
+                </div>
+                <div id="lista-vendedores" class="lista"></div>
+            </section>
+        </main>
     </div>
     <script src="script.js"></script>
 </body>

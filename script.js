@@ -7,56 +7,67 @@ const firebaseConfig = {
   messagingSenderId: "1054553218054",
   appId: "1:1054553218054:web:0322b0598710bf655d3787"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
+let myChart;
 
 function ingresarAlSistema() {
-    const user = document.getElementById('login-nombre').value;
-    const pass = document.getElementById('login-clave').value;
-    
-    if (user === "Jose Tolentino" && pass === "GT123") {
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('app-container').style.display = 'block';
-        cargarVendedores();
-    } else {
-        alert("Acceso denegado. Verifica usuario y clave.");
-    }
+    const u = document.getElementById('login-nombre').value;
+    const p = document.getElementById('login-clave').value;
+    if(u === "Jose Tolentino" && p === "GT123") {
+        document.getElementById('login-screen').style.display='none';
+        document.getElementById('app-container').style.display='flex';
+        cargarDashboard();
+    } else { alert("Acceso Incorrecto"); }
 }
 
-function cargarVendedores() {
-    db.ref('usuarios').on('value', (snapshot) => {
-        const div = document.getElementById('lista-vendedores');
-        div.innerHTML = "";
-        if (!snapshot.exists()) {
-            div.innerHTML = "No hay vendedores aún.";
-            return;
-        }
-        snapshot.forEach((child) => {
-            const v = child.val();
-            div.innerHTML += `<div style="padding:8px; border-bottom:1px solid #eee;">👤 <strong>${v.nombre}</strong> (Clave: ${v.clave})</div>`;
-        });
+function mostrarSeccion(id) {
+    ['sec-dashboard', 'sec-registro', 'sec-vendedores'].forEach(s => {
+        document.getElementById(s).style.display = (s === 'sec-'+id) ? 'block' : 'none';
     });
 }
 
-document.getElementById('btn-registrar').onclick = function() {
-    const nom = document.getElementById('new-nombre').value;
-    const cla = document.getElementById('new-clave').value;
+function guardarVenta() {
+    const m = document.getElementById('v-monto').value;
+    const p = document.getElementById('v-plaza').value;
+    const c = document.getElementById('v-concepto').value;
+    if(!m || !c) return alert("Por favor llena todos los campos");
 
-    if(!nom || !cla) {
-        alert("Llena ambos campos.");
-        return;
-    }
-
-    alert("Subiendo a la nube de GAETO...");
-
-    db.ref('usuarios/' + nom.replace(/\s/g, '_')).set({
-        nombre: nom,
-        clave: cla,
-        depto: "VENTAS"
+    db.ref('ventas').push({
+        monto: parseFloat(m),
+        plaza: p,
+        concepto: c,
+        fecha: new Date().toLocaleDateString()
     }).then(() => {
-        alert("✅ Vendedor guardado correctamente.");
-        document.getElementById('new-nombre').value = "";
-        document.getElementById('new-clave').value = "";
-    }).catch(e => alert("Error: " + e.message));
-};
+        alert("¡Venta registrada con éxito!");
+        document.getElementById('v-monto').value = "";
+        document.getElementById('v-concepto').value = "";
+        cargarDashboard();
+    });
+}
+
+function cargarDashboard() {
+    db.ref('ventas').on('value', (snapshot) => {
+        let total = 0;
+        let datosPlazas = {};
+        snapshot.forEach(child => {
+            const v = child.val();
+            total += v.monto;
+            datosPlazas[v.plaza] = (datosPlazas[v.plaza] || 0) + v.monto;
+        });
+        document.getElementById('total-general').innerText = "$" + total.toLocaleString();
+        actualizarGrafica(datosPlazas);
+    });
+}
+
+function actualizarGrafica(datos) {
+    const ctx = document.getElementById('graficaVentas').getContext('2d');
+    if(myChart) myChart.destroy();
+    myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(datos),
+            datasets: [{ label: 'Ventas por Plaza', data: Object.values(datos), backgroundColor: '#1a73e8' }]
+        }
+    });
+}
