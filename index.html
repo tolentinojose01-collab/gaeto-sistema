@@ -3,38 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM GAETO - Vendedores</title>
+    <title>CRM GAETO</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
 <body>
-
     <div id="login-screen">
-        <div class="card">
+        <div style="background:white; padding:20px; border-radius:10px; display:inline-block; margin-top:50px; border:1px solid #ccc; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
             <h2>Acceso GAETO</h2>
-            <input type="text" id="login-nombre" placeholder="Nombre de Usuario">
-            <input type="password" id="login-clave" placeholder="Contraseña Administrativa">
-            <button onclick="ingresarAlSistema()" class="btn-azul">ENTRAR AL SISTEMA</button>
+            <input type="text" id="login-nombre" placeholder="Usuario (Jose Tolentino)" style="display:block; margin:10px auto; padding:10px; width:200px;">
+            <input type="password" id="login-clave" placeholder="Clave (GT123)" style="display:block; margin:10px auto; padding:10px; width:200px;">
+            <button onclick="ingresarAlSistema()" style="background:#007bff; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer; width:100%;">ENTRAR</button>
         </div>
     </div>
 
-    <div id="app-container" style="display:none;">
-        <h1>SISTEMA DE CONTROL GAETO</h1>
-        
-        <div class="card">
+    <div id="app-container" style="display:none; padding:20px;">
+        <h1>SISTEMA DE CONTROL - GAETO</h1>
+        <div style="background:white; padding:20px; border-radius:10px; border:1px solid #ccc; margin:auto; max-width:400px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
             <h3>Dar de Alta Nuevo Vendedor</h3>
-            <input type="text" id="new-nombre" placeholder="Nombre del Vendedor">
-            <input type="text" id="new-clave" placeholder="Clave que usará el vendedor">
-            <button id="btn-registrar" class="btn-verde">ENVIAR A LA NUBE</button>
+            <input type="text" id="new-nombre" placeholder="Nombre completo" style="width:90%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:5px;">
+            <input type="text" id="new-clave" placeholder="Asignar clave" style="width:90%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:5px;">
+            <button id="btn-registrar" style="background:#28a745; color:white; padding:12px; width:100%; font-weight:bold; cursor:pointer; border:none; border-radius:5px; font-size:16px;">ENVIAR A LA NUBE</button>
         </div>
-
-        <div class="card">
-            <h3>Vendedores Registrados en la Nube</h3>
-            <div id="lista-vendedores">Cargando lista...</div>
+        
+        <div style="background:white; padding:20px; border-radius:10px; border:1px solid #ccc; margin-top:20px; max-width:400px; margin-left:auto; margin-right:auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <h3>Vendedores en la Nube</h3>
+            <div id="lista-vendedores" style="text-align:left;">Cargando datos...</div>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>

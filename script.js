@@ -1,4 +1,3 @@
-// Configuración de tu base de datos GAETO
 const firebaseConfig = {
   apiKey: "AIzaSyCxR1mRUenuJd4Fvd7Q635LJwctrtk0ZVE",
   authDomain: "crm-gaeto.firebaseapp.com",
@@ -9,11 +8,9 @@ const firebaseConfig = {
   appId: "1:1054553218054:web:0322b0598710bf655d3787"
 };
 
-// Iniciar Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// Función para entrar (Tus datos: Jose Tolentino / GT123)
 function ingresarAlSistema() {
     const user = document.getElementById('login-nombre').value;
     const pass = document.getElementById('login-clave').value;
@@ -23,52 +20,43 @@ function ingresarAlSistema() {
         document.getElementById('app-container').style.display = 'block';
         cargarVendedores();
     } else {
-        alert("❌ Datos incorrectos. Verifica tu nombre y clave.");
+        alert("Acceso denegado. Verifica usuario y clave.");
     }
 }
 
-// Función para ver a los vendedores en tiempo real
 function cargarVendedores() {
     db.ref('usuarios').on('value', (snapshot) => {
-        const listaDiv = document.getElementById('lista-vendedores');
-        listaDiv.innerHTML = "";
+        const div = document.getElementById('lista-vendedores');
+        div.innerHTML = "";
         if (!snapshot.exists()) {
-            listaDiv.innerHTML = "No hay vendedores registrados.";
+            div.innerHTML = "No hay vendedores aún.";
             return;
         }
-        snapshot.forEach((childSnapshot) => {
-            const datos = childSnapshot.val();
-            listaDiv.innerHTML += `
-                <div style="background:#f9f9f9; padding:10px; margin:5px; border-radius:5px; border-left:5px solid #28a745; text-align:left;">
-                    <strong>👤 ${datos.nombre}</strong> <br>
-                    <small>Clave: ${datos.clave} | Depto: ${datos.depto}</small>
-                </div>`;
+        snapshot.forEach((child) => {
+            const v = child.val();
+            div.innerHTML += `<div style="padding:8px; border-bottom:1px solid #eee;">👤 <strong>${v.nombre}</strong> (Clave: ${v.clave})</div>`;
         });
     });
 }
 
-// Lógica del botón de registro
 document.getElementById('btn-registrar').onclick = function() {
     const nom = document.getElementById('new-nombre').value;
     const cla = document.getElementById('new-clave').value;
 
-    if(nom === "" || cla === "") {
-        alert("⚠️ Por favor escribe el nombre y la clave.");
+    if(!nom || !cla) {
+        alert("Llena ambos campos.");
         return;
     }
 
-    alert("Conectando con la base de datos de GAETO...");
+    alert("Subiendo a la nube de GAETO...");
 
-    // Guardar en la nube
     db.ref('usuarios/' + nom.replace(/\s/g, '_')).set({
         nombre: nom,
         clave: cla,
         depto: "VENTAS"
     }).then(() => {
-        alert("✅ Vendedor registrado con éxito en la nube.");
+        alert("✅ Vendedor guardado correctamente.");
         document.getElementById('new-nombre').value = "";
         document.getElementById('new-clave').value = "";
-    }).catch((error) => {
-        alert("Ocurrió un error: " + error.message);
-    });
+    }).catch(e => alert("Error: " + e.message));
 };
