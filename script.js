@@ -1,3 +1,4 @@
+// CONFIGURACIÓN FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyCxR1mRUenuJd4Fvd7Q635LJwctrtk0ZVE",
   authDomain: "gaeto-ventas-2026.firebaseapp.com",
@@ -12,18 +13,44 @@ if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 const db = firebase.database();
 let myChart;
 
+// --- NUEVA FUNCIÓN DE LOGIN (Para ti y tus vendedores) ---
 function ingresarAlSistema() {
-    const u = document.getElementById('login-nombre').value.toLowerCase().trim();
+    const u = document.getElementById('login-nombre').value.trim();
     const p = document.getElementById('login-clave').value.trim();
+    const uLow = u.toLowerCase();
 
-    if((u === "jose" || u === "jose tolentino") && p === "GT123") {
+    // 1. Primero checamos si eres TÚ (El administrador)
+    if((uLow === "jose" || uLow === "jose tolentino") && p === "GT123") {
+        alert("Bienvenido, Jefe");
         document.getElementById('login-screen').style.display='none';
         document.getElementById('app-container').style.display='flex';
         cargarTodo();
-    } else { 
-        alert("DATOS INCORRECTOS\nUsa: Jose\nClave: GT123"); 
+        return; // Salimos de la función porque ya entramos
     }
+
+    // 2. Si no eres tú, buscamos en la base de datos de VENDEDORES
+    const userRef = u.replace(/\s/g, '_'); // Convertimos espacio en guion bajo
+    db.ref('usuarios/' + userRef).once('value').then((snapshot) => {
+        if (snapshot.exists()) {
+            const userData = snapshot.val();
+            if (userData.clave === p) {
+                // Si la clave coincide, lo dejamos entrar
+                alert("Bienvenido, " + userData.nombre);
+                document.getElementById('login-screen').style.display='none';
+                document.getElementById('app-container').style.display='flex';
+                // Ocultamos la gestión de vendedores para que los empleados no se den de alta solos
+                document.querySelector('button[onclick*="vendedores"]').style.display = 'none';
+                cargarTodo();
+            } else {
+                alert("CONTRASEÑA INCORRECTA");
+            }
+        } else {
+            alert("USUARIO NO ENCONTRADO");
+        }
+    });
 }
+
+// --- EL RESTO DEL CÓDIGO SE QUEDA IGUAL ---
 
 function mostrarSeccion(id) {
     document.getElementById('sec-dashboard').style.display = 'none';
@@ -68,10 +95,12 @@ function guardarVenta() {
 function cargarTodo() {
     db.ref('usuarios').on('value', (snap) => {
         const div = document.getElementById('lista-vendedores');
-        div.innerHTML = "";
-        snap.forEach(child => {
-            div.innerHTML += `<div style="background:white; padding:10px; margin:5px; border-left:5px solid #1a73e8; border-radius:5px;">👤 ${child.val().nombre}</div>`;
-        });
+        if(div) { // Solo si el div existe (para el admin)
+            div.innerHTML = "";
+            snap.forEach(child => {
+                div.innerHTML += `<div style="background:white; padding:10px; margin:5px; border-left:5px solid #1a73e8; border-radius:5px;">👤 ${child.val().nombre}</div>`;
+            });
+        }
     });
 
     db.ref('ventas').on('value', (snap) => {
